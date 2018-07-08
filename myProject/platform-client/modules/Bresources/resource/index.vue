@@ -545,6 +545,7 @@
 
 <style lang="less">
 //   @import "../../../assets/css/variable.less";
+ 
 
   .resource {
   

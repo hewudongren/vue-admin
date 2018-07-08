@@ -97,7 +97,7 @@ export default {
 
     onOpsHoverHandler(row) {
 
-      console.log(row)
+     
     },
 
     doLayout() {

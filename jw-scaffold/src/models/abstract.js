@@ -46,7 +46,7 @@ let AbstractModel = inherit({
   },
 
   getResult() {
-
+    
     if(this.result instanceof BaseStore) {
 
       return this.result.get(STORE_KEY)

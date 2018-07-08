@@ -61,7 +61,7 @@
     },
 
     created() {
-
+     
       this.fetch()
     },
 
@@ -75,6 +75,7 @@
       getTableOperateList() {
         let otherLang = i18nService.getOtherLanguageMap()
         let { lang } = i18nService.getLanguageMap()
+        //获得lang这个对象，里面包含了国际化的配置，
 
         return {
           list: [{
@@ -83,7 +84,7 @@
             type: 'delete' 
           },{
             icon: 'el-icon-edit',
-            display: lang['platform.app_app.editApp'],
+            display: lang['platform.app_app.editApp'],  //获得配置好的值，键自己定义
             type: 'edit'
           },{
             icon: 'icon-user-setting',

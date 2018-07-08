@@ -6,16 +6,25 @@
         />
         <!-- 相关信息 -->
         <div class="info">
-            <div class="draft">
+            <div class="draft" >
                 <div class="pic">
                     <i class="el-icon-date"></i>
                 </div>
                 <div class="details">
-                    <p class="title icon-aa-shoes">草稿中的</p>
+                    <p class="title icon-aa-shoes">{{aa().a}}</p>
                     <span class="num icon-aa-yingyongzhongxin"> 20</span>
                 </div>
             </div>
-            <div class="draft">
+            <div class="draft" >
+                <div class="pic">
+                    <i class="el-icon-date"></i>
+                </div>
+                <div class="details">
+                    <p class="title">{{aa().b}}</p>
+                    <span class="num"> 20</span>
+                </div>
+            </div>
+            <div class="draft" >
                 <div class="pic">
                     <i class="el-icon-date"></i>
                 </div>
@@ -24,16 +33,7 @@
                     <span class="num"> 20</span>
                 </div>
             </div>
-            <div class="draft">
-                <div class="pic">
-                    <i class="el-icon-date"></i>
-                </div>
-                <div class="details">
-                    <p class="title">草稿中的</p>
-                    <span class="num"> 20</span>
-                </div>
-            </div>
-            <div class="draft">
+            <div class="draft" >
                 <div class="pic">
                     <i class="el-icon-date"></i>
                 </div>
@@ -44,7 +44,7 @@
             </div>
         </div>
         <!-- 搜索区 -->
-        <el-row  class="search mgb">
+        <!-- <el-row  class="search mgb">
             <el-col :span="8">
                 <div class="grid-content bg-purple">
                     <span class="name">类别</span>
@@ -71,7 +71,7 @@
                     </el-select>
                 </div>
            </el-col>
-           <el-col :span="8" style="text-align: right">
+           <el-col :span="8"  style="text-align: right">
                 <div class="grid-content bg-purple">
                     <span class="name">创建时间</span>
                        <el-date-picker
@@ -84,7 +84,10 @@
                        </el-date-picker>
                 </div>
            </el-col>
-        </el-row>
+        </el-row> -->
+        <handle :list='getHandle()' @onChange="onChange">
+
+        </handle>
         <el-row  class="search mgb">
             <el-col :span="8">
                 <div class="grid-content bg-purple">
@@ -215,6 +218,7 @@ import getAppConfig from './app-config.js'
 
 import JwTable from 'jw_components/table/table'
 import JwTableHeaderControl from 'jw_components/table/control-header'
+import Handle from '../../../mycomponent/handle'
 export default {
     data(){
         return {
@@ -277,9 +281,45 @@ export default {
     },
     components: {
             'jw-table': JwTable,
-            'jw-table-control': JwTableHeaderControl
+            'jw-table-control': JwTableHeaderControl,
+            'handle':Handle
             },
     methods:{
+        onChange(a,b){
+            console.log(a,b)
+        },
+        getHandle(){
+            let otherLang = i18nService.getOtherLanguageMap()
+            let { lang } = i18nService.getLanguageMap()
+            return  [{
+                type: 'select',
+                options:[1,2,3],
+                ppp:"",
+                txt:'类别'|| lang['platform.common.add']
+                },
+                {
+                type: 'select',
+                options:[4,5,6],
+                ppp:"",
+                txt:'科室'|| lang['platform.common.add']
+                },
+                 {
+                options:[1,2,3],
+                ppp:"",     
+                type: 'select',
+                txt:'创建时间'|| lang['platform.common.add']
+                }
+              
+                ]
+            },
+           aa(){
+                let otherLang = i18nService.getOtherLanguageMap()
+                let { lang } = i18nService.getLanguageMap()
+                return {
+                    a:lang['platform.app_app.editApp'],
+                    b:lang['platform.app_app.permission']
+                }
+           },
            //获取面包屑导航 
            getTitle() {
             
@@ -312,11 +352,11 @@ export default {
             },
             //编辑行
             onEite(row){
-                console.log(row)
+             
             },
             //删除行
             onDelete(row){
-                console.log(row)
+              
             }
     } ,
            
@@ -324,11 +364,11 @@ export default {
 }
 </script>   
 <style lang="less">
+  
     .bresources{
         padding: 20px;
-        // background-color:@blue;
         width: 100%;
-        min-width: 1400px;
+        // min-width: 1400px;
         // height: 100%;
         overflow-x: hidden;
        box-sizing: border-box;

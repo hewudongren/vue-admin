@@ -50,6 +50,7 @@ let getOtherLanguageMap = ()=>{
   let languageCode = getSelectedLanguageCode()
 
   languageCode = languageCode.split('-')[0]
+  
   return otherLang[languageCode]
 }
 
