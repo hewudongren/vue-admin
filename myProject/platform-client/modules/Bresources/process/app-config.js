@@ -38,16 +38,16 @@ export default function () {
       //   return <div class="text-ellipsis">{value}</div>
       // }
     }, {
-      prop: 'version',
+      prop: 'department',
       // width: 100,
       sort:true,
       display:'科室'|| lang['platform.app_app.version']
     }, {
-      prop: 'creatorName',
+      prop: 'createBy',
       display: lang['platform.common.creatorName'],
       // width: i18Service.isChinese()? 100 : 130
     }, {
-      prop: 'createdDate',
+      prop: 'createTime',
       // width: 150,
       sort:true,
       display: lang['platform.common.creatorDate'],

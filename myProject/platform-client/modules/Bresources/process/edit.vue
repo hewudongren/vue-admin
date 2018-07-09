@@ -201,7 +201,7 @@
         value: '',
         input: '',
 
-        activeName: 'frist',
+        activeName: 'first',
         data: [{
           label: '总装',
           children: [{

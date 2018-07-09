@@ -64,7 +64,7 @@ export default [
   },
   {
     path: '/bresources/process',
-    component: () => import(/*webpackChunkName: "svc_index"*/'./platform-client/modules/Bresources/process/index')
+    component: () => import(/*webpackChunkName: "process_index"*/'./platform-client/modules/Bresources/process/index')
   },
   {
     path: '/bresources/process/edit/:id',

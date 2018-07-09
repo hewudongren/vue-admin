@@ -31,7 +31,9 @@ module.exports = {
   
     i18n: `${gateway}/i18n`,
     dict: `${gateway}/dict`,
-    account: `${gateway}/account`
+    account: `${gateway}/account`,
+
+     baseUrl: 'http://192.168.1.51:13002'  // Jw.baseUrl
   },
 
   title: 'JWI Cloud Platform',

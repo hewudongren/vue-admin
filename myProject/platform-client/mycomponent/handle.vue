@@ -25,7 +25,7 @@
         :ref="'inputRef'+i"
         @input="(value)=>{onInputChange(item,value)}"
       />
-       <el-select  @change='(value)=>{onChange(item,value)}' v-model="item.ppp"  placeholder="请选择"  v-else-if="item.type === 'select'">
+       <el-select  @change='(value)=>{onChange(item,value)}' v-model="ppp"  placeholder="请选择"  v-else-if="item.type === 'select'">
             <el-option
             v-for="(a) in item.options"
             :key="a"
@@ -73,7 +73,7 @@ export default {
 
   methods: {
     onChange(item,value){
-        
+        this.ppp=value
        this.$emit('onChange',value,item)
     },  
     emptyInputs() {

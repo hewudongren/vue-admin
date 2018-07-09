@@ -71,7 +71,7 @@
     },
 
     methods: {
-
+      //国际化可以采用这种直观的方法配置
       getTableOperateList() {
         let otherLang = i18nService.getOtherLanguageMap()
         let { lang } = i18nService.getLanguageMap()

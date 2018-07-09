@@ -14,18 +14,19 @@ const PAGE_SIZE = staticData.tablePageSize
 let AppReaditionModel = inherit(AbstractModel, {
   initialization() {
 
-    this.url = `${Jw.gateway}/platform/app/app/read`
+    // this.url = `${Jw.gateway}/platform/app/app/read`
+     this.url = 'http://192.168.1.51:13002/procedure/searchIndex'
     this.type = 'get'
-    this.pageIndex = 1
-    this.query = {
-      take: PAGE_SIZE,
-      skip: 0
-    }
+    // this.pageIndex = 1
+    // this.query = {
+    //   take: PAGE_SIZE,
+    //   skip: 0
+    // }
   },
 
   dataFormat(data) {
 
-    return data.result
+    return data.data
   },
 
   setPageIndex(pageIndex) {
@@ -33,10 +34,10 @@ let AppReaditionModel = inherit(AbstractModel, {
     this.pageIndex = pageIndex
   },
 
-  execute(pageIndex) {
+  execute() {
     
-    this.query.skip = (this.pageIndex-1) * PAGE_SIZE
-    
+    // this.query.skip = (this.pageIndex-1) * PAGE_SIZE
+   
     return this.exec()
   }
 })

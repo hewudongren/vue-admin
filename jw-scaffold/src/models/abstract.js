@@ -130,8 +130,10 @@ let AbstractModel = inherit({
       }).then((result) => {
         
           if (result && result.data && result.data.code === this.SUCCESS) {
+            
             let formatedData = this.dataFormat(result.data)
             this.setResult(formatedData)
+           
             return formatedData
           } else {
             //请求失败，抛出错误信息

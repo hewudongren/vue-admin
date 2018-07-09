@@ -44,11 +44,11 @@
             </div>
         </div>
         <!-- 搜索区 -->
-        <!-- <el-row  class="search mgb">
+        <el-row  class="search mgb">
             <el-col :span="8">
                 <div class="grid-content bg-purple">
                     <span class="name">类别</span>
-                    <el-select v-model="value" placeholder="请选择">
+                    <el-select v-model="value" placeholder="选择类别">
                         <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -61,7 +61,7 @@
            <el-col :span="8">
                 <div class="grid-content bg-purple">
                     <span class="name">科室</span>
-                    <el-select v-model="value" placeholder="请选择">
+                    <el-select v-model="value" placeholder="选择科室">
                         <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -84,15 +84,14 @@
                        </el-date-picker>
                 </div>
            </el-col>
-        </el-row> -->
-        <handle :list='getHandle()' @onChange="onChange">
-
-        </handle>
+        </el-row>
+        <!-- <handle :list='getHandle()' @onChange="onChange"> -->
+       <!-- </handle> -->
         <el-row  class="search mgb">
             <el-col :span="8">
                 <div class="grid-content bg-purple">
                     <span class="name">状态</span>
-                    <el-select v-model="value" placeholder="请选择">
+                    <el-select v-model="value" placeholder="选择">
                         <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -215,6 +214,7 @@
 <script>
 import i18nService from 'jw_services/i18n/index'
 import getAppConfig from './app-config.js'
+import myfetch from '../../../axios/myfetch.js'
 
 import JwTable from 'jw_components/table/table'
 import JwTableHeaderControl from 'jw_components/table/control-header'
@@ -277,7 +277,7 @@ export default {
         }
     },
     created(){
-         
+       
     },
     components: {
             'jw-table': JwTable,

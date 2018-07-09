@@ -13,7 +13,7 @@ const cookie = {
   getCookie(name) {
     let cookieString = "; " + document.cookie
     let parts = cookieString.split("; " + name + "=")
-
+    
     if (parts.length == 2) {
       return parts.pop().split(";").shift()
     }

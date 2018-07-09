@@ -18,7 +18,7 @@
         name="import"
         :headers="getAccessToken()"
         v-for="(item,i) in buttons"
-        v-if="item.type === 'upload'"
+        v-if="item.type === 'import'"
         :show-file-list="false"
         :key="i"
         :action="item.uploadUrl"
