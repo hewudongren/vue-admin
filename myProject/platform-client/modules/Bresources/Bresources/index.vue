@@ -75,7 +75,7 @@
                 <div class="grid-content bg-purple">
                     <span class="name">创建时间</span>
                        <el-date-picker
-                       style="margin-left:20px;"
+                       style="margin-left:20px;width:75%"
                         v-model="value6"
                         type="daterange"
                         range-separator="至"
@@ -115,13 +115,15 @@
            <el-col :span="8" style="text-align: right">
                 <div class="grid-content bg-purple">
                     <span class="name">关键字</span>
-                   <el-input
-                        style="width:auto;margin-right:56px;margin-left:20px"  
-                        placeholder="请输入内容"
-                        prefix-icon="el-icon-search"
-                        v-model="input">
-                    </el-input>
-                    <el-button>确认</el-button>
+                    <div style="width:75%;display:inline-block">
+                        <el-input
+                                style="width:auto;float:left"  
+                                placeholder="请输入内容"
+                                prefix-icon="el-icon-search"
+                                v-model="input">
+                            </el-input>
+                            <el-button>确认</el-button>
+                    </div>
                 </div>
            </el-col>
         </el-row>
@@ -419,6 +421,7 @@ export default {
                .name{
                    width:80px;
                    display: inline-block;
+                   text-align: left;
                }
            }
           

@@ -13,8 +13,19 @@
             </span>
             <h4>标准描述库</h4>
             <jw-table-control float='left' :buttons="getTableConfig()" @on-input-change="onChangeHandler" />
-            <el-tree :data="data" accordion :props="defaultProps" @node-click="handleNodeClick">
+
+            <el-tree 
+            :data="data" 
+            ref="tree"
+            
+            accordion 
+            highlight-current
+            :props="defaultProps" 
+            node-key="id"
+            :default-expanded-keys="getTreeExpandId()"
+            @node-click="onTreeClick">
             </el-tree>
+
           </el-tab-pane>
           <el-tab-pane label="用户管理" name="second">
             <span slot="label">
@@ -52,21 +63,21 @@
                 <el-col :span="8">
                   <div class="grid-content bg-purple-dark">
                     <div>工序编号</div>
-                    <div class="num">123457</div>
+                    <div class="num">{{entity.code}}</div>
                     <div>创建者</div>
                     <div>
-                      <span class="name num">张三</span>
-                      <span class="time">2018.5.9</span>
+                      <span class="name num">{{entity.createBy}}</span>
+                      <span class="time">{{entity.createTime}}</span>
                     </div>
                   </div>
                 </el-col>
                 <el-col :span="7">
                   <div class="grid-content bg-purple-dark">
                     <div>工序名称</div>
-                    <el-input style="margin-bottom:20px;" v-model="input" placeholder="请输入内容"></el-input>
+                    <el-input style="margin-bottom:20px;" v-model="entity.name" placeholder="请输入内容"></el-input>
                     <div>版本</div>
                     <div>
-                      <span class="name num">张三</span>
+                      <span class="name num">{{entity.version||1.0}}</span>
                     </div>
                   </div>
                 </el-col>
@@ -75,7 +86,7 @@
                     <div>关联物料分类</div>
                     <div class="num">123457</div>
                     <div>状态</div>
-                    <el-select style="width:100%" v-model="value" placeholder="请选择">
+                    <el-select style="width:100%" v-model="entity.status" placeholder="请选择">
                       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
@@ -155,48 +166,43 @@
 <script>
   import i18nService from "jw_services/i18n/index"
   import getAppConfig from './app-config.js'
+  import appStore from "../../../stores/common.js";
 
   import JwTableHeaderControl from 'jw_components/table/control-header'
   import JwTable from 'jw_components/table/table'
+
+  import createUpdateAppModel from "../../../myfetch/standardProcedure/app-create-update.js";
+  import getEdit from "../../../myfetch/standardProcedure/get-edit.js";
+  import appBaseModel from "../../../myfetch/standardProcedure/app-base";
+
+  let parentId = '0';
+  let loadingTimerId = 0
   export default {
     data() {
       return {
+         entity: {},  //编辑总数据
+         loading:true,//loading
         rows: [{
-            name: '王小虎',
+            name: '力矩',
             parametervalue: '上海市普陀区金沙江路 1518 弄',
-            unit: '男科',
+            unit: '牛/米',
 
           },
           {
-            name: '王小虎',
+            name: '料宽',
             parametervalue: '上海市普陀区金沙江路 1518 弄',
-            unit: '男科',
+            unit: '米',
 
-          },
-          {
-            name: '王小虎',
-            parametervalue: '上海市普陀区金沙江路 1518 弄',
-            unit: '男科',
-
-          },
+          }
 
 
         ],
         options: [{
-          value: '选项1',
-          label: '黄金糕'
+          value: '已启用',
+         
         }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
+          value: '未启用',
+          
         }],
         value: '',
         input: '',
@@ -204,30 +210,39 @@
         activeName: 'first',
         data: [{
           label: '总装',
+          id:"0",
           children: [{
-              label: '在装配线体上放上工艺板你好好好好阿红阿红阿红啊哈哈付款后付款垃圾客服哈利'
+              label: '在装配线体上放上工艺板你好好好好阿红阿红阿红啊哈哈付款后付款垃圾客服哈利',
+              id:"2"
             },
             {
-              label: 'wwwww'
+              label: 'wwwww',
+              id:"3"
             }
           ]
 
         }, {
           label: '钣金',
+          id:"2",
           children: [{
-              label: '在装配线体上放上工艺板'
+              label: '在装配线体上放上工艺板',
+              id:"4"
             },
             {
-              label: 'wwwww'
+              label: 'wwwww',
+              id:"5"
             }
           ]
         }, {
           label: '两器',
+          id:"3",
           children: [{
-              label: '在装配线体上放上工艺板'
+              label: '在装配线体上放上工艺板',
+              id:"6"
             },
             {
-              label: 'wwwww'
+              label: 'wwwww',
+              id:"6"
             }
           ]
         }],
@@ -243,7 +258,126 @@
       'jw-table-control': JwTableHeaderControl
 
     },
+    created(){
+       this.fetch()
+    },
     methods: {
+      //默认展开的tree节点
+      getTreeExpandId(){
+        return [ parentId ]
+      },
+      getParamId() {
+      return this.$route.params.id;
+      },
+       isAddition() {
+      let additionCode = "0";
+
+      return this.getParamId() === additionCode;
+    },
+
+      //获得编辑数据
+        fetch() {
+        let id = this.getParamId()
+
+        this.showLoading()
+       
+          appBaseModel.execute().then(result => {
+            console.log(result)
+            this.hideLoading()
+            this.entity = result
+            this.updateCategoryForNoAdminAppBase()
+          }).catch(()=>{
+            this.hideLoading(true)  
+             let lang = i18nService.getOtherLanguageMap();
+
+     
+     
+          })
+      
+      },
+      //  fetch() {
+      //   let id = this.getParamId()
+
+      //   this.showLoading()
+      //   if (this.isAddition()) {
+      //     appBaseModel.execute().then(result => {
+      //       this.hideLoading()
+      //       this.entity = result
+      //       this.updateCategoryForNoAdminAppBase()
+      //     }).catch(()=>{
+      //       this.hideLoading(true)  
+      //       this.networkFailHandler()
+      //     })
+      //   } else {
+      //     let entity = appStore.get("row-data")
+          
+      //     if(_.isEmpty(entity)) {
+      //       return this.exit()
+      //     }
+
+      //     this.entity = entity
+      //     console.log(this.entity)
+      //     //this.updateCategoryForNoAdminAppBase()
+      //     this.hideLoading()
+      //   }
+      // },
+     exit() {
+
+      this.$router.push({ path: "/app/app/index" });
+    },
+    save() {
+      let appBaseEditer = this.$refs.appBase
+
+      appBaseEditer
+      .validate()
+      .then((data)=>{
+        let paramData = this.getValue()
+        let lang = i18nService.getOtherLanguageMap()
+  
+        createUpdateAppModel.setParam(paramData)
+        createUpdateAppModel
+          .execute(this.isAddition())
+          .then(() => {
+            this.$success(lang["saveSuccess"])
+            this.$router.push({ path: "/app/app/index" })
+          })
+          .catch(() => {
+            this.$error(lang["saveFail"]);
+          })
+      }).catch(()=>{
+        this.scrollTop()
+      })
+    },
+      //获得tree数据
+      // fetch() {
+      //     let lang = i18nService.getOtherLanguageMap();
+      //     let delayHideLoading = _.debounce(() => {
+      //       this.loading = false;
+      //     }, 500);
+      //     //同时发多个异步请求
+      //     Promise.all([
+      //       treeModel.execute(),
+      //       orgReaditionModel.execute(this.pageIndex, parentId)
+      //     ]).then(datas => {
+      //         let treeData = datas[0];
+      //         let orgData = datas[1];
+
+      //         this.result = orgData;
+      //         this.treeOrgs = [{
+      //           id: parentId, 
+      //           name: "ROOT", 
+      //           children: treeData
+      //         }]
+      //       }).then(()=>{
+      //         this.$refs.tree.setCurrentKey(parentId)
+      //         delayHideLoading();
+      //       }).catch(() => {
+      //         this.loading = false;
+      //         this.$alert(lang["loadingFailAgain"], "Error").then(() => {
+      //           this.fetch()
+      //         })
+      //       });
+      // },
       //获得面包数据
       getTitle() {
 
@@ -257,10 +391,10 @@
         } else {
           if (this.entity) {
             titles.push(lang['platform.common.edit'])
-            titles.push(this.entity.name)
+            // titles.push(this.entity.name)追加
           }
         }
-
+        
         return titles
       },
       isAddition() {
@@ -293,8 +427,13 @@
         ]
         return button
       },
-      onHeaderButtonClick() {
-
+      onHeaderButtonClick(buttons) {
+         if(buttons.type=="save"){
+            this.save()
+         }
+         if(buttons.type=='cancel'){
+           this.$router.go(-1)
+         }
       },
       //回退
       exit() {
@@ -321,7 +460,7 @@
       handleClick() {
 
       },
-      handleNodeClick(data) {
+      onTreeClick(data) {
         console.log(data);
       },
       //上传按钮
@@ -353,7 +492,21 @@
       thResource() {
 
         return getAppConfig().thResource
-      }
+      },
+        showLoading() {
+
+      this.loading = true
+    },
+
+    hideLoading(is) {
+      clearTimeout(loadingTimerId)
+      if(is) {
+        this.loading = false
+      }else{
+        loadingTimerId = setTimeout(()=>{ this.loading = false }, 500)
+      }     
+    },
+
 
 
     }

@@ -19,7 +19,7 @@ import { Message, Loading} from 'element-ui';
 // let truHost = 'http://192.168.1.10:13001/mpm'; //odc才发
 //let truHost = 'http://192.168.6.1:13001/mpm'; //odc虎哥
  //let truHost = 'http://127.0.0.1:13001/mpm'; //odc虎哥
- let truHost = '192.168.1.51:13002'; //开发-家勇
+ let truHost = 'http://192.168.1.32:13002'; //开发-家勇
  let token = cookieParser.getCookie('token') || 'c8cf88057fd85dc0578eb80044d903404dcfdbec5d8451';
 //  let accessToken = sessionStorage.getItem(window.appkey) || 'cecac4017bdb11c0548eef5712d15e4117cddde712895586ec0138da53ae0ff68abae97d6ea4a58453e721cdc4';
 
@@ -78,7 +78,7 @@ const myfetch = function (url, params) {
         headers: headers
     }
 
-    console.log('opt: ', opt);
+    // console.log('opt: ', opt);
 
     return new Promise((resolve, reject) => {
         return axios(opt)

@@ -24,11 +24,11 @@ export default function () {
   return {
     
     tableHeader: [{
-      prop: 'resourcename',
+      prop: 'name',
       sort:true,
       display:'工序名称'|| lang['platform.app_app.resourcename']
     }, {
-      prop: 'showname',
+      prop: 'code',
       // width: 100,
       display: '工序编号'||lang['platform.app_app.showname']
       // isCopy: true,
@@ -54,7 +54,7 @@ export default function () {
       formatter: function(value) {
         
         //如果没有值，默认当前时间
-        return util.dayjs(value.createdDate).format('YYYY-MM-DD HH:mm')
+        return util.dayjs(value.createTime).format('YYYY-MM-DD HH:mm')
       }
     }, {
       prop: 'icon',

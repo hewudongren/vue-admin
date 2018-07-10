@@ -34,7 +34,7 @@ let AppReaditionModel = inherit(AbstractModel, {
   },
 
   execute(pageIndex) {
-    
+   
     this.query.skip = (this.pageIndex-1) * PAGE_SIZE
     
     return this.exec()

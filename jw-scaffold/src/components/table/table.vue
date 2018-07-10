@@ -132,7 +132,7 @@ export default {
       this.$emit('on-page-change',pageCount)
     },
     onRank(item){
-      this.$emit('rank',item)
+      this.$emit('on-rank',item)
     },
 
     selectionChange(row) {

@@ -8,7 +8,7 @@
         <el-col :span="8">
           <div class="grid-content bg-purple">
             <span class="name">科室</span>
-            <el-select @change="changeDepartment" v-model="department" placeholder="请选择">
+            <el-select @change="changeDepartment" v-model="department" placeholder="请选择" clearable>
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
@@ -17,7 +17,7 @@
         <el-col :span="8">
           <div class="grid-content bg-purple">
             <span class="name">状态</span>
-            <el-select @change="changeStatus" v-model="status" placeholder="请选择">
+            <el-select @change="changeStatus" v-model="status" placeholder="请选择" clearable>
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
@@ -26,7 +26,7 @@
         <el-col :span="8" style="text-align:right">
           <div class="clearfix">
             <span class="name" style="text-align:left">创建时间</span>
-            <el-date-picker v-model="timeBucket" value-format="timestamp" @change="changeTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+            <el-date-picker clearable v-model="timeBucket" value-format="timestamp" @change="changeTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
         </el-col>
@@ -35,7 +35,7 @@
         <el-col :span="8">
           <div class="grid-content bg-purple">
             <span class="name">类型</span>
-            <el-select @change="changeCcategory" v-model="category" placeholder="请选择">
+            <el-select @change="changeCcategory" v-model="category" placeholder="请选择" clearable>
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
@@ -44,19 +44,20 @@
         <el-col :span="8">
           <div class="grid-content bg-purple">
             <span class="name">创建者</span>
-            <el-input style="width:217px" @input="inputCreator" v-model="creator" prefix-icon="el-icon-search" placeholder="请输入内容"></el-input>
+            <el-input clearable style="width:217px" @input="inputCreator" v-model="createBy" prefix-icon="el-icon-search" placeholder="请输入内容"></el-input>
           </div>
         </el-col>
         <el-col :span="8" style="text-align:right">
           <div class="grid-content bg-purple">
             <span class="name" style="text-align:left">关键字 </span>
-            <el-input style="width:350px" @input="inputGxName" v-model="gxName" prefix-icon="el-icon-search" placeholder="请输入内容"></el-input>
+            <el-input clearable style="width:350px" @input="inputGxName" v-model="gxName" prefix-icon="el-icon-search" placeholder="请输入内容"></el-input>
           </div>
         </el-col>
       </el-row>
       <jw-table-control class="mgb" float="left" :buttons="getTableState()" @on-header-button="onHeaderButtonClick" />
       <!-- 主体 -->
       <jw-table ref="jwTable" 
+      v-loading="loading"
       :data="rows" 
       :isSelection=true 
       :isRowCheckBox=true 
@@ -66,11 +67,14 @@
         :totalCount="totalCount" 
         :header="getTableHeader()" 
         :currentPage="currentPage" 
-        @onEite="onEite" 
+        @onEite="onEdit" 
         @onDelete='onDelete'
-        @on-page-change="onPageChange" @on-operate-click="onOperateClick">
+        @on-rank='onRank'
+        @on-page-change="onPageChange" 
+        @on-operate-click="onOperateClick">
       </jw-table>
     </div>
+    <jw-dialog ref="dialog" />
   </div>
 </template>
 
@@ -80,19 +84,24 @@
   import i18nService from "jw_services/i18n/index";
   import JwTable from "jw_components/table/table";
   import JwTableHeaderControl from "jw_components/table/control-header";
+  import JwDialog from "jw_components/dialog";
 
-  import appStore from "jw_stores/common";
+  import appStore from "../../../stores/common.js";
   import getAppConfig from "./app-config.js";
+
   import tableModel from "../../../myfetch/standardProcedure/index.js";
-  import tableRowDeleteModel from "jw_models/app/recod-delete";
-  import myfetch from '../../../axios/myfetch.js'
+  import tableRowDeleteModel from "../../../myfetch/standardProcedure/delete-table-row";
+  import saveOrgModel from "../../../myfetch/standardProcedure/save-org.js";
+  import additionOrgModel from "../../../myfetch/standardProcedure/new-org";
+  
+  // import myfetch from '../../../axios/myfetch.js'
 
   let defaultPageIndex = 1;
   let loadingTimerId = 0;
   //初始化表格数据属性，避免数据属性混乱
   const ROW = {
-    resourcename: "--",
-    showname: "--",
+    name: "--",
+    code: "--",
     department: "--",
     createTime: "--",
     createBy: "--"
@@ -107,8 +116,9 @@
         startTime:'',  //开始时间
         endTime:'',    //结束时间
         category:'',   //类型
-        creator:'',    //创建者
+        createBy:'',    //创建者
         gxName:'',     //关键字
+        loading: true, //loading效果
 
 
         totalCount: 0,
@@ -120,8 +130,8 @@
         value: "",
         value6: "",
         options: [{
-            value: "选项1",
-            label: "黄金糕"
+            value: "生产部"
+            
           },
           {
             value: "选项2",
@@ -150,13 +160,20 @@
 
     components: {
       "jw-table": JwTable,
-      "jw-table-control": JwTableHeaderControl
+      "jw-table-control": JwTableHeaderControl,
+      "jw-dialog": JwDialog
     },
 
     methods: {
       //选择科室
       changeDepartment(){
+            tableModel.execute({department:this.department}).then(data=>{
+            this.rows=data
           
+          }).catch(err=>{
+           
+            console.log(err)
+          })
       },
       //选择状态
       changeStatus(){
@@ -164,7 +181,14 @@
       },
       //时间段选择
       changeTime(){
-        console.log(this.timeBucket)
+       
+            tableModel.execute({timeBucket:this.timeBucket}).then(data=>{
+            this.rows=data
+          
+          }).catch(err=>{
+           
+            console.log(err)
+          })
       },
       //选择类型
       changeCcategory(){
@@ -172,7 +196,13 @@
       },
       //创建者
       inputCreator(){
-        
+           tableModel.execute({createBy:this.createBy}).then(data=>{
+            this.rows=data
+          
+          }).catch(err=>{
+           
+            console.log(err)
+          })
       },
       //关键字
       inputGxName(){
@@ -240,6 +270,9 @@
       },
       //导航栏按钮点击事件
       onHeaderButtonClick(buttonClicked) {
+        if(buttonClicked.type === "add"){
+          this.add()
+        }
         if (buttonClicked.type === "delete") {
           
           this.deleteMore();
@@ -285,29 +318,102 @@
       },
       //表格数据单删
        onDelete(row) {
-        console.log(row);
+        this.deleteTableRow(row)
       },
+      deleteTableRow(row) {
+      let lang = i18nService.getOtherLanguageMap()
+      let hideTableLoading = _.debounce(()=>{this.tableLoading=false},500)
+
+      this.$alert(lang["deleteWarning"], "Warning").then(() => {
+          this.tableLoading = true;
+          return tableRowDeleteModel.execute(row.id);
+        })
+        .then(() => {
+          let index = _.findIndex(this.result.rows, r => {
+            return r.id === row.id;
+          });
+          this.result.rows.splice(index, 1);
+          hideTableLoading()
+        })
+        .catch(error => {
+          error !== "cancel" && this.$error(lang["operateError"]);
+        });
+    },
       //编辑表格数据
-       onEite(item) {
-        this.showDialogForEdit(item);
+    onEdit(row) {
+       appStore.set('row-data',row)
+       this.$router.push({
+         path: `/bresources/process/edit/${row.id}`
+     });
+    },
+    showDialog(form) {
+      let otherLang = i18nService.getOtherLanguageMap()
+      let { lang } = i18nService.getLanguageMap()
+      let dialog = this.$refs.dialog
+ 
+      return dialog.show({
+        title:'标准工序编辑'|| lang["platform.app_org.editOrg"],
+        list: [
+          {
+            name: '工序名称'||lang["platform.app_user.name"],
+            prop: "name"
+          },{
+            name:'工序编号'|| lang["platform.common.code"],
+            prop: "code"
+          },{
+            name:'科室'|| lang["platform.app_org.abbreviation"],
+            prop: "department"
+          },{
+            name:'创建者'|| lang["platform.common.desc"],
+            prop: "createBy"
+          },{
+            name:'创建时间'|| lang["platform.common.desc"],
+            prop: "createTime"
+          }
+     
+        ],
+        rules: {
+          name: { required: true, message: otherLang.notEmpty },
+          code: { required: true, message: otherLang.notEmpty },
+          department: { required: true, message: otherLang.notEmpty },
+          createBy: { required: true, message: otherLang.notEmpty },
+          createTime: { required: true, message: otherLang.notEmpty }
+          
+        },
+        form:Object.assign({}, form)
+      });
+    },
+      //表格远程排序
+      onRank(a,b){
+        console.log(a)
+
       },
 
       fetch() {
         //开启loading
-        // this.showLoading();
-        //传入初始页码
-      
+         this.showLoading()
          tableModel.execute().then(data=>{
-            this.rows=data
-          }).catch(err=>{
            
-            console.log(err)
-          })
+            this.rows=data
+            this.hideLoading()
+          }).catch(()=>{
+
+            let lang = i18nService.getOtherLanguageMap()
+
+            this.totalCount = 0
+            this.rows = []
+            this.hideLoading(true)
+
+            this.$alert(lang['loadingFailAgain'], 'Error').then(()=>{
+
+              this.fetch()
+            })
+        })
        
         //发送请求
           // myfetch('getStandardOperation')
           // .then(data => {
-          //  console.log(data)
+          //  this.rows=data.data
             
           // })
           // .catch(err => {
@@ -323,12 +429,43 @@
           //   });
           // });
       },
+       add() {
+        let lang = i18nService.getOtherLanguageMap()
 
-      add() {
-        this.$router.push({
-          path: `/bresources/process/edit/0`
-        });
-      },
+        additionOrgModel.execute().then((data)=>{
+          return this.showDialog(data)
+        }).then((result)=>{
+          this.loading = true
+          result.parentId = parentId
+          return saveOrgModel.execute(true,result)
+        }).then(()=>{
+          this.pageIndex = 1
+          return this.fetch()
+        }).catch((error)=>{
+          this.loading = false
+          (error !== 'cancel') && this.$error(lang['operateError'])
+        })
+    },
+
+      // add() {
+
+        
+      //   let lang = i18nService.getOtherLanguageMap()
+
+      //   this.showDialog(rowEditData).then((data)=>{
+      //   console.log(data)
+      //     data.parentId = parentId 
+      //     return saveOrgModel.execute(false,data)
+      //   }).then(()=>{
+      //     this.pageIndex = 1
+      //     return this.fetch()
+      //   }).catch((error)=>{
+      //     (error !== 'cancel') && this.$error(lang['operateError'])
+      //   })
+      //   // this.$router.push({
+      //   //   path: `/bresources/process/edit/0`
+      //   // });
+      // },
       //编辑页面
       edit(row) {
         appStore.set("row-data", row);

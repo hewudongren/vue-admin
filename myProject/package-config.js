@@ -23,17 +23,17 @@ module.exports = {
       }
     }
   },
-  // 请求接口
+  // 请求接口，配置全局变量
   metaConf: {
    login,
-    appkey,
-     gateway,
-  
-    i18n: `${gateway}/i18n`,
-    dict: `${gateway}/dict`,
-    account: `${gateway}/account`,
+   appkey,
+   gateway,
 
-     baseUrl: 'http://192.168.1.51:13002'  // Jw.baseUrl
+   i18n: `${gateway}/i18n`,
+   dict: `${gateway}/dict`,
+   account: `${gateway}/account`,
+
+   baseUrl: 'http://192.168.1.32:13002'  // Jw.baseUrl,配置全局变量
   },
 
   title: 'JWI Cloud Platform',

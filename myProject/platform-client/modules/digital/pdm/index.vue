@@ -126,7 +126,7 @@
   import tableRowDeleteModel from 'jw_models/app/recod-delete'
 
 import tablecolumn from './app-config.js'
-import tableModel from '../../../models/app/app-read'
+// import tableModel from '../../../models/app/app-read'
 
 
 let loadingTimerId = 0

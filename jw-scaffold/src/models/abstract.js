@@ -73,7 +73,7 @@ let AbstractModel = inherit({
   },
 
   getParam() {
-
+   
     return this.param
   },
 
@@ -109,7 +109,7 @@ let AbstractModel = inherit({
         query.__timer = new Date().getTime()
       }
     }
-
+   
     return query
   },
   //请求数据接口

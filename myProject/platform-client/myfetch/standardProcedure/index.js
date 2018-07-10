@@ -15,17 +15,20 @@ let AppReaditionModel = inherit(AbstractModel, {
   initialization() {
 
     // this.url = `${Jw.gateway}/platform/app/app/read`
-     this.url = 'http://192.168.1.51:13002/procedure/searchIndex'
+     this.url = `${Jw.baseUrl}/procedure/searchIndex`
     this.type = 'get'
-    // this.pageIndex = 1
-    // this.query = {
-    //   take: PAGE_SIZE,
-    //   skip: 0
-    // }
+    this.pageIndex = 1
+    this.param={
+     
+    }
+    this.query = {
+      take: PAGE_SIZE,
+      skip: 0
+    }
   },
 
   dataFormat(data) {
-
+    
     return data.data
   },
 
@@ -34,10 +37,19 @@ let AppReaditionModel = inherit(AbstractModel, {
     this.pageIndex = pageIndex
   },
 
-  execute() {
+  execute(source) {
+    //传入对象合并，传入数字类型忽略
     
-    // this.query.skip = (this.pageIndex-1) * PAGE_SIZE
-   
+    let obj=Object.assign(this.query, source);
+    for (const key in obj) {
+     
+      if (obj[key]==""||obj[key]==null) {
+        delete obj[key]
+      }
+    }
+    this.query=obj
+    this.query.skip = (this.pageIndex-1) * PAGE_SIZE
+  
     return this.exec()
   }
 })
