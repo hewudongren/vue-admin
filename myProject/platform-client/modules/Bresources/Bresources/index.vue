@@ -115,7 +115,7 @@
            <el-col :span="8" style="text-align: right">
                 <div class="grid-content bg-purple">
                     <span class="name">关键字</span>
-                    <div style="width:75%;display:inline-block">
+                    <div class="quren" style="width:75%;display:inline-block">
                         <el-input
                                 style="width:auto;float:left"  
                                 placeholder="请输入内容"
