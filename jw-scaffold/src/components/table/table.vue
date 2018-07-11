@@ -32,6 +32,7 @@
       <!-- 主体内容 -->
       <el-table-column
         v-for="(item,i) in header"
+        v-if="!item.type"
         :prop="item.prop"
         :label="item.display"
         :sortable='item.sort'
@@ -39,6 +40,22 @@
         :width="item.width || 'auto'"
         :key="i">
       </el-table-column>
+      <el-table-column v-else-if="item.type"  :label="item.display">
+        <template slot-scope="scope">
+          <el-select v-if="_.isArray(scope.row.parametervalue)" v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in scope.row.parametervalue"
+              :key="item.value"
+             
+              :value="item">
+            </el-option>
+        </el-select>
+          <el-input v-else v-model="scope.row.parametervalue"></el-input>
+       
+        </template>
+      </el-table-column>
+      
+      
     </el-table>
     <!-- 页码 -->
     <el-pagination
@@ -64,7 +81,11 @@ export default {
     'pageSize','totalCount','currentPage','isRowCheckBox','height',
     'opsList'
   ],
-
+  data(){
+     return {
+       value:""
+     }
+  },
   components: {
     ColumnPopover
   },
@@ -172,7 +193,7 @@ export default {
 
       return false
     },
-
+    //格式化处理函数
     formatter(item) {
       let innerElement = null
       let copyElement = null

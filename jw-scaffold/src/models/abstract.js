@@ -129,15 +129,15 @@ let AbstractModel = inherit({
         data: this.getType() === 'GET' ? null : this.getParam()
       }).then((result) => {
         
-          if (result && result.data && result.data.code === this.SUCCESS) {
-            
+          if (result && result.data && result.data.code === this.SUCCESS||'200') {
+           
             let formatedData = this.dataFormat(result.data)
             this.setResult(formatedData)
            
             return formatedData
           } else {
             //请求失败，抛出错误信息
-            
+          
              return Promise.reject(result.data)
           }
         }
@@ -146,7 +146,7 @@ let AbstractModel = inherit({
   },
 
   dataFormat(result) {
-
+    // let result=JSON.parse(result)
     return result
   }
 })

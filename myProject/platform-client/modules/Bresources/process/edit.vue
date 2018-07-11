@@ -142,8 +142,15 @@
                   <i class="el-icon-more-outline"></i>
                 </span> 工艺参数</h4>
             </div>
-            <jw-table ref="jwTable" :data="rows" :isRowCheckBox=true :showPagination="false" :header="getTableHeader()" @onEite='onEite'
-              @onDelete='onDelete' @on-page-change="onPageChange" @on-operate-click="onOperateClick">
+            <jw-table 
+            ref="jwTable" 
+            :data="rows" 
+            :isRowCheckBox=true 
+            :showPagination="false" 
+            :header="getTableHeader()" 
+            
+            @onEite='onEite'
+            @onDelete='onDelete' @on-page-change="onPageChange" @on-operate-click="onOperateClick">
             </jw-table>
           </div>
           <!-- 工艺资源 -->
@@ -184,18 +191,14 @@
          loading:true,//loading
         rows: [{
             name: '力矩',
-            parametervalue: '上海市普陀区金沙江路 1518 弄',
+            parametervalue: [1,2],
             unit: '牛/米',
-
           },
           {
             name: '料宽',
-            parametervalue: '上海市普陀区金沙江路 1518 弄',
+            parametervalue: '29',
             unit: '米',
-
           }
-
-
         ],
         options: [{
           value: '已启用',
@@ -270,11 +273,9 @@
         e.preventDefault(); //阻止默认事件，否则不会触发ondrop事件
       }
       bom.ondrop = function(e) {
-	console.log(11111 )
- 
 				bom.appendChild(aa)
-        cc.appendChild(aa)
-		}
+      
+		  }
 	},
     methods: {
       //默认展开的tree节点
@@ -296,8 +297,8 @@
 
         this.showLoading()
        
-          appBaseModel.execute().then(result => {
-            console.log(result)
+          getEdit.execute({id:id}).then(result => {
+           
             this.hideLoading()
             this.entity = result
             this.updateCategoryForNoAdminAppBase()

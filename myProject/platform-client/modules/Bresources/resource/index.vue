@@ -35,11 +35,11 @@
                 </el-select>
             </div>
         </el-col>
-           <el-col :span="8">
+           <el-col :span="8" style="text-align: right">
             <div class="clearfix">
                   <span class="name">创建时间</span>
                     <el-date-picker
-                    
+                    style="width: calc(100% - 110px)"
                     v-model="value6"
                     type="daterange"
                     range-separator="至"
@@ -69,10 +69,10 @@
                   <el-input style="width:217px" v-model="input" placeholder="请输入内容"></el-input>
             </div>
         </el-col>
-           <el-col :span="8">
+           <el-col :span="8" style="text-align: right">
             <div class="grid-content bg-purple">
                   <span class="name">关键字 </span>
-                  <el-input style="width:350px" v-model="input" placeholder="请输入内容"></el-input>
+                  <el-input class="input" style="width: calc(100% - 110px)" v-model="input" placeholder="请输入内容"></el-input>
             </div>
         </el-col>
       </el-row>
@@ -552,6 +552,7 @@
     .name {
       width: 60px;
       display: inline-block;
+      text-align: left;
     }
 
     .app-icon-wrapper {

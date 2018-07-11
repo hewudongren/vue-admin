@@ -62,7 +62,7 @@ export default {
       return new Promise((resolve,reject)=>{
 
         this.onCancel = ()=>{
-
+          
           this.hide()
           reject('cancel')
         }
@@ -70,7 +70,7 @@ export default {
         this.onClose = ()=>{
 
           this.hide()
-          reject('cancel')
+           reject('cancel')
         }
 
         this.onConfirm = ()=>{
@@ -84,7 +84,8 @@ export default {
 
           formElement.validate().then(()=>{
             this.hide()
-            resolve(this.form)
+           
+           resolve(this.form)
           }).catch(()=>{})
         }
       })

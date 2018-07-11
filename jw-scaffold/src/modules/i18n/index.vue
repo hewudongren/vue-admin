@@ -224,7 +224,7 @@ export default {
           this.save(rowEntity, "updateI18nResourceSet");
         })
     },
-
+    //显示模态框
     showDialogForAddition() {
       let dialog = this.$refs.dialog;
       let { formItemList, formData, rules } = this.getTableAdditionEditConfig();

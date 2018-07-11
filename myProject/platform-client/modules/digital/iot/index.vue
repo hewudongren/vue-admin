@@ -346,7 +346,7 @@ export default {
             },
     methods:{
            getTitle() {
-               console.log(i18nService.getI18nTitle().title)
+              
                 return i18nService.getI18nTitle().title
             }, 
     }        

@@ -22,7 +22,7 @@ export default function () {
   let otherLang = i18Service.getOtherLanguageMap()
  
   return {
-    
+   
     tableHeader: [{
       prop: 'name',
       sort:true,
@@ -75,12 +75,15 @@ export default function () {
   }, {
     prop: 'parametervalue',
     display: '参数值'||lang['platform.app_app.showname'],
+    type:"input"
     
-    formatter: function formatter(row, col, value) {
-      let h = this.$createElement
-     
-      return <div class="text-ellipsis"><el-input v-model='value' placeholder="请输入内容"></el-input></div>
-    }
+    // formatter: function formatter(row, col, value) {
+    //   let h = this.$createElement
+      
+    // return <div class="text-ellipsis"><el-input v-model='a' placeholder="请输入内容"></el-input></div>
+    // // return <div>{value}</div>
+      
+    // }
   }, {
     prop: 'unit',
     display:'单位'|| lang['platform.app_app.version']
@@ -105,6 +108,7 @@ thResource: [{
   
   formatter: function formatter(row, col, value) {
     let h = this.$createElement
+    
    
     return <div class="text-ellipsis"> <el-input-number v-model="value"  label="描述文字"></el-input-number></div>
   }

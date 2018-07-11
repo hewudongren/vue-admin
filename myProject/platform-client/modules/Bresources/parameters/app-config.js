@@ -24,11 +24,11 @@ export default function () {
   return {
     
     tableHeader: [{
-      prop: 'resourcename',
+      prop: 'name',
       sort:true,
-      display:'资源名称'|| lang['platform.app_app.resourcename']
+      display:'参数名称'|| lang['platform.app_app.resourcename']
     }, {
-      prop: 'showname',
+      prop: 'showName',
       // width: 100,
       display: '显示名称'||lang['platform.app_app.showname']
       // isCopy: true,
@@ -38,23 +38,28 @@ export default function () {
       //   return <div class="text-ellipsis">{value}</div>
       // }
     }, {
-      prop: 'version',
+      prop: 'department',
       // width: 100,
       sort:true,
       display:'科室'|| lang['platform.app_app.version']
     }, {
-      prop: 'creatorName',
+      prop: 'getWay',
+      // width: 100,
+      // sort:true,
+      display:'取值方式'|| lang['platform.app_app.version']
+    }, {
+      prop: 'createBy',
       display: lang['platform.common.creatorName'],
       width: i18Service.isChinese()? 100 : 130
     }, {
-      prop: 'createdDate',
+      prop: 'createTime',
       width: 150,
       sort:true,
       display: lang['platform.common.creatorDate'],
       formatter: function(value) {
         
         //如果没有值，默认当前时间
-        return util.dayjs(value.createdDate).format('YYYY-MM-DD HH:mm')
+        return util.dayjs(value.createTime).format('YYYY-MM-DD HH:mm')
       }
     }, {
       prop: 'icon',

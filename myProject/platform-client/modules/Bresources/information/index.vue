@@ -207,7 +207,7 @@
         })
     },
        onDelete(e){
-         console.log(e)
+        
        } ,  
       getTableOperateList() {
         let otherLang = i18nService.getOtherLanguageMap()

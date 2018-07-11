@@ -23,10 +23,10 @@
             </el-select>
           </div>
         </el-col>
-        <el-col :span="8" style="text-align:right">
+        <el-col :span="8" style="text-align: right">
           <div class="clearfix">
             <span class="name" style="text-align:left">创建时间</span>
-            <el-date-picker clearable v-model="timeBucket" value-format="timestamp" @change="changeTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+            <el-date-picker style="width: calc(100% - 110px)" clearable v-model="timeBucket" value-format="timestamp" @change="changeTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
         </el-col>
@@ -47,10 +47,10 @@
             <el-input clearable style="width:217px" @input="inputCreator" v-model="createBy" prefix-icon="el-icon-search" placeholder="请输入内容"></el-input>
           </div>
         </el-col>
-        <el-col :span="8" style="text-align:right">
+        <el-col :span="8" style="text-align: right">
           <div class="grid-content bg-purple">
             <span class="name" style="text-align:left">关键字 </span>
-            <el-input clearable style="width:350px" @input="inputGxName" v-model="gxName" prefix-icon="el-icon-search" placeholder="请输入内容"></el-input>
+            <el-input clearable class="input" style="width: calc(100% - 110px)" @input="inputGxName" v-model="gxName" prefix-icon="el-icon-search" placeholder="请输入内容"></el-input>
           </div>
         </el-col>
       </el-row>
@@ -103,6 +103,7 @@
     name: "--",
     code: "--",
     department: "--",
+    getWay:'',
     createTime: "--",
     createBy: "--"
   };
@@ -154,7 +155,7 @@
     },
 
     created() {
-        // this.fetch()
+         this.fetch()
        
     },
 
@@ -346,7 +347,7 @@
          path: `/bresources/process/edit/${row.id}`
      });
     },
-    showDialog(form) {
+    showDialog() {
       let otherLang = i18nService.getOtherLanguageMap()
       let { lang } = i18nService.getLanguageMap()
       let dialog = this.$refs.dialog
@@ -380,12 +381,12 @@
           createTime: { required: true, message: otherLang.notEmpty }
           
         },
-        form:Object.assign({}, form)
+        form:{}
       });
     },
       //表格远程排序
       onRank(a,b){
-        console.log(a)
+       
 
       },
 
@@ -431,10 +432,10 @@
       },
        add() {
         let lang = i18nService.getOtherLanguageMap()
-
-        additionOrgModel.execute().then((data)=>{
-          return this.showDialog(data)
-        }).then((result)=>{
+      
+          this.showDialog()
+        .then((result)=>{
+          console.log(result,11)
           this.loading = true
           result.parentId = parentId
           return saveOrgModel.execute(true,result)

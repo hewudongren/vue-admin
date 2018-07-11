@@ -75,7 +75,7 @@
                 <div class="grid-content bg-purple">
                     <span class="name">创建时间</span>
                        <el-date-picker
-                       style="margin-left:20px;width:75%"
+                       style="margin-left:20px;width: calc(100% - 110px);"
                         v-model="value6"
                         type="daterange"
                         range-separator="至"
@@ -115,9 +115,9 @@
            <el-col :span="8" style="text-align: right">
                 <div class="grid-content bg-purple">
                     <span class="name">关键字</span>
-                    <div class="quren" style="width:75%;display:inline-block">
+                    <div class="quren" style="width: calc(100% - 110px);display:inline-block">
                         <el-input
-                                style="width:auto;float:left"  
+                                style="width: calc(100% - 110px);;float:left"  
                                 placeholder="请输入内容"
                                 prefix-icon="el-icon-search"
                                 v-model="input">
@@ -288,7 +288,7 @@ export default {
             },
     methods:{
         onChange(a,b){
-            console.log(a,b)
+           
         },
         getHandle(){
             let otherLang = i18nService.getOtherLanguageMap()

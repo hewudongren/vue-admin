@@ -431,7 +431,7 @@
 
       },
       handleNodeClick(data) {
-        console.log(data);
+       
       },
       //上传按钮
       uploadDocument() {
