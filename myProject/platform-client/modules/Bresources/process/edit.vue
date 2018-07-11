@@ -17,7 +17,7 @@
             <el-tree 
             :data="data" 
             ref="tree"
-            
+            draggable
             accordion 
             highlight-current
             :props="defaultProps" 
@@ -47,7 +47,7 @@
       </div>
       <!-- 右侧 -->
       <div class='panel-right'>
-        <h4 class="title">上线</h4>
+        <h4 class="title" draggable='true'>上线</h4>
         <div class="main">
           <!-- 属性 -->
           <div class="attribute mgbb">
@@ -61,8 +61,8 @@
             <div class="details">
               <el-row>
                 <el-col :span="8">
-                  <div class="grid-content bg-purple-dark">
-                    <div>工序编号</div>
+                  <div class="grid-content bg-purple-dark cc">
+                    <div class="aa" draggable='true'>工序编号</div>
                     <div class="num">{{entity.code}}</div>
                     <div>创建者</div>
                     <div>
@@ -261,6 +261,21 @@
     created(){
        this.fetch()
     },
+    mounted() {
+     
+      let aa=document.getElementsByClassName('aa')[0]
+      let cc=document.getElementsByClassName("cc")[0]
+      let bom=document.getElementsByClassName('list')[0]
+      bom.ondragover = function(e) {
+        e.preventDefault(); //阻止默认事件，否则不会触发ondrop事件
+      }
+      bom.ondrop = function(e) {
+	console.log(11111 )
+ 
+				bom.appendChild(aa)
+        cc.appendChild(aa)
+		}
+	},
     methods: {
       //默认展开的tree节点
       getTreeExpandId(){

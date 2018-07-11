@@ -81,18 +81,18 @@ module.exports = {
           use: ['css-loader']
         })
       }, 
-      {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          fallback: "vue-style-loader",
-          use: [ 'less-loader' ]
-        })
-      }
-      // ,
       // {
       //   test: /\.less$/,
-      //   loader: "style-loader!css-loader!less-loader"
+      //   use: ExtractTextPlugin.extract({
+      //     fallback: "vue-style-loader",
+      //     use: [ 'less-loader' ]
+      //   })
       // }
+      // ,
+      {
+        test: /\.less$/,
+        loader: "style-loader!css-loader!less-loader"
+      }
     ]
   }
 }

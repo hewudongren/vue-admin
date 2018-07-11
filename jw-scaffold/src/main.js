@@ -23,7 +23,7 @@ injectElementUi(Vue)
 import util from 'jw_common/util'
 
 // import 'jw_assets/css/base.less'
-import 'jw_assets/css/media.css' 
+import 'jw_assets/css/media.less' 
 import 'jw_assets/css/base.css'
 import 'jw_assets/icon/iconfont.css'
 

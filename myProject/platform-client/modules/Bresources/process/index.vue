@@ -57,7 +57,7 @@
       <jw-table-control class="mgb" float="left" :buttons="getTableState()" @on-header-button="onHeaderButtonClick" />
       <!-- 主体 -->
       <jw-table ref="jwTable" 
-      v-loading="loading"
+     
       :data="rows" 
       :isSelection=true 
       :isRowCheckBox=true 
@@ -118,7 +118,7 @@
         category:'',   //类型
         createBy:'',    //创建者
         gxName:'',     //关键字
-        loading: true, //loading效果
+        loading: false, //loading效果
 
 
         totalCount: 0,
@@ -154,7 +154,7 @@
     },
 
     created() {
-        this.fetch()
+        // this.fetch()
        
     },
 
