@@ -33,8 +33,8 @@ module.exports = {
    dict: `${gateway}/dict`,
    account: `${gateway}/account`,
 
-  //  baseUrl: 'http://192.168.1.33:13002'  // Jw.baseUrl,配置全局变量
-    baseUrl: 'http://192.168.1.16:13001'  // Jw.baseUrl,配置全局变量
+     baseUrl: 'http://192.168.1.166:13001'  // Jw.baseUrl,配置全局变量，家勇
+    //  baseUrl: 'http://192.168.1.16:13001'  // Jw.baseUrl,配置全局变量，罗灵
   },
 
   title: 'JWI Cloud Platform',

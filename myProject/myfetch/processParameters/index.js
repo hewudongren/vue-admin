@@ -13,9 +13,8 @@ const PAGE_SIZE = staticData.tablePageSize
 
 let AppReaditionModel = inherit(AbstractModel, {
   initialization() {
-
-    // this.url = `${Jw.gateway}/platform/app/app/read`
-     this.url = `${Jw.baseUrl}/procedure/searchIndex`
+   
+     this.url = `${Jw.baseUrl}/bop/technology/parameter/query/paramter`
     this.type = 'post'
     this.pageIndex = 1
     this.param={
@@ -28,7 +27,7 @@ let AppReaditionModel = inherit(AbstractModel, {
   },
 
   dataFormat(data) {
-    
+  
     return data.data
   },
 
@@ -47,9 +46,9 @@ let AppReaditionModel = inherit(AbstractModel, {
         delete obj[key]
       }
     }
-    // this.query=obj
+    this.query=obj
     //  this.query.skip = (this.pageIndex-1) * PAGE_SIZE
-  
+   
     return this.exec()
   }
 })

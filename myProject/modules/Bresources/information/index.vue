@@ -1,6 +1,6 @@
 <template>
   <div class="panel resource">
-    <!-- 功能区 -->
+    <!-- 表头 -->
     <jw-table-control
       class="mgb"
       :title="getTitle()"
@@ -35,11 +35,11 @@
                 </el-select>
             </div>
         </el-col>
-           <el-col :span="8" style="text-align: right">
+           <el-col :span="8">
             <div class="clearfix">
                   <span class="name">创建时间</span>
                     <el-date-picker
-                    style="width: calc(100% - 110px)"
+                    
                     v-model="value6"
                     type="daterange"
                     range-separator="至"
@@ -69,19 +69,19 @@
                   <el-input style="width:217px" v-model="input" placeholder="请输入内容"></el-input>
             </div>
         </el-col>
-           <el-col :span="8" style="text-align: right">
+           <el-col :span="8">
             <div class="grid-content bg-purple">
                   <span class="name">关键字 </span>
-                  <el-input class="input" style="width: calc(100% - 110px)" v-model="input" placeholder="请输入内容"></el-input>
+                  <el-input style="width:350px" v-model="input" placeholder="请输入内容"></el-input>
             </div>
         </el-col>
       </el-row>
        <jw-table-control
-          class="mgb"
-          float="left"
-          :buttons="getTableState()"
-          @on-header-button="onHeaderButtonClick"
-       />
+      class="mgb"
+      float="left"
+      :buttons="getTableState()"
+      @on-header-button="onHeaderButtonClick"
+    />
 
     <!-- 主体 -->
     <jw-table
@@ -91,21 +91,18 @@
       :isRowCheckBox=true
       :isIndex=true
       :pageSize="pageSize"
-      
+      :opsList="getTableOperateList()"
       :showPagination="true"
       :totalCount="totalCount"
       :header="getTableHeader()"
       :currentPage="currentPage"
-
       @onEite="onEite"
       @onDelete='onDelete'
-      @rank='rank'
+
       @on-page-change="onPageChange"
       @on-operate-click="onOperateClick">
     </jw-table>
     </div>
-    <!-- 模态框 -->
-    <jw-dialog ref="dialog" />
  
   </div>
 </template>
@@ -116,14 +113,11 @@
   import i18nService from 'jw_services/i18n/index'
   import JwTable from 'jw_components/table/table'
   import JwTableHeaderControl from 'jw_components/table/control-header'
-  import Dialog from "jw_components/dialog";
 
   import appStore from 'jw_stores/common'
   import getAppConfig from './app-config.js'
   import tableModel from 'jw_models/app/app-read'
   import tableRowDeleteModel from 'jw_models/app/recod-delete'
-
-  import dictionartDefSave from "../../../myfetch/resource/dictionary-def-save.js";
 
   let defaultPageIndex = 1
   let loadingTimerId = 0
@@ -164,7 +158,6 @@
           value: '选项5',
           label: '北京烤鸭'
         }],
-        languageCategories: []
       }
     },
 
@@ -175,23 +168,18 @@
 
     components: {
       'jw-table': JwTable,
-      'jw-table-control': JwTableHeaderControl,
-      'jw-dialog':Dialog
+      'jw-table-control': JwTableHeaderControl
     },
 
     methods: {
-      rank(item){
-        console.log(item)
-      },
       onEite(item){
    
-            this.onEdit(item)
+     this.showDialogForEdit(item)
           },
-    //显示模态框
+          //显示模态框
     showDialogForEdit(entity) {
       let dialog = this.$refs.dialog;
       let rowEntity = _.clone(entity);
-      
       let { formItemList, formData, rules } = this.getTableAdditionEditConfig(rowEntity);
 
       delete rowEntity.createDate;
@@ -218,82 +206,8 @@
           this.save(rowEntity, "updateI18nResourceSet");
         })
     },
-     getTableAdditionEditConfig(entity) {
-      let otherLang = i18nService.getOtherLanguageMap();
-      let { lang } = i18nService.getLanguageMap();
-
-      let formData = { resourceKey: "" };
-      let rules = {};
-      let formItemList = this.languageCategories.map((x, index) => {
-        let key = `resourceValue_${index}`;
-
-        formData[key] = entity ? entity[key] : "";
-        rules[key] = [{ required: true, message: otherLang.notEmpty }]
-        return {
-          languageCode: x.code,
-          name: x.name,
-          prop: key
-        };
-      });
-
-      rules["resourceKey"] = [{ required: true, message: otherLang.notEmpty }];
-      entity && (formData.resourceKey = entity.resourceKey);
-      formItemList.unshift({
-        name: lang["platform.i18n.key"],
-        prop: "resourceKey"
-      });
-
-      return { formData, formItemList, rules };
-    },
-      onEdit(rowEditData) {
-      
-      let lang = i18nService.getOtherLanguageMap()
-
-      this.showDialog(rowEditData).then((data)=>{
-        data.parentId = parentId 
-        return saveOrgModel.execute(false,data)
-      }).then(()=>{
-        this.pageIndex = 1
-        return this.fetch()
-      }).catch((error)=>{
-        (error !== 'cancel') && this.$error(lang['operateError'])
-      })
-    },
-
-    showDialog(form) {
-      let otherLang = i18nService.getOtherLanguageMap()
-      let { lang } = i18nService.getLanguageMap()
-      let dialog = this.$refs.dialog
-     
-      
- 
-      return dialog.show({
-        title: lang["platform.app_org.editOrg"],
-        list: [
-          {
-            name: lang["platform.app_user.name"],
-            prop: "name"
-          },{
-            name: lang["platform.common.code"],
-            prop: "code"
-          },{
-            name: lang["platform.app_org.abbreviation"],
-            prop: "abbreviation"
-          },{
-            name: lang["platform.common.desc"],
-            prop: "desc"
-          }
-        ],
-        rules: {
-          name: { required: true, message: otherLang.notEmpty },
-          code: { required: true, message: otherLang.notEmpty }
-        },
-        form
-      });
-    },
-      //删除表格数据
-       onDelete(row){
-         this.deleteTableRow(row)
+       onDelete(e){
+        
        } ,  
       getTableOperateList() {
         let otherLang = i18nService.getOtherLanguageMap()
@@ -355,7 +269,7 @@
 
       getTitle() {
         
-        return i18nService.getI18nTitle().title
+        return i18nService.getI18nTitle().title||'你好'
       },
 
       onPageChange(pageCount) {
@@ -377,75 +291,14 @@
       },
 
       onHeaderButtonClick(buttonClicked) {
-        if(buttonClicked.type === 'add'){
-         this.add()
-        }
-        if(buttonClicked.type === 'delete') {
-          this.delete()
+
+        if(buttonClicked.type === 'add') {
+          this.add()
         }else if(buttonClicked.type === 'export'){
           this.export()
         }
       },
-      //添加弹出模态框
-      add(){
-        this.onDictDefAddition()
-      },
-        //弹出模态框
-    onDictDefAddition() {
-      let lang = i18nService.getOtherLanguageMap();
-
-      this.dictDefOperate(null)
-        .then(result => {
-          this.dictionaryDefPageIndex = 1;
-          this.hideLoading(true);
-          this.fetchDictionaryDefinition();
-        })
-        .catch(error => {
-          this.hideLoading(true);
-          error !== "cancel" && this.$error(error.message || lang["operateError"]);
-        });
-    },
-     //显示模态框
-    dictDefOperate(data) {
-      let otherLang = i18nService.getOtherLanguageMap();
-      //初始化数据
-      let form = { dictCode: "", dictName: "" };
-      let dialog = this.$refs.dialog;
-      //添加标识符（）
-      let operate = "create";
-      //初始数据为空
-      if (!_.isEmpty(data)) {
-        //编辑标识符
-        (operate = "update"),
-          (form = {
-            id: data.id,
-            dictCode: data.dictCode,
-            dictName: data.dictName
-          });
-      }
-
-      return dialog
-        .show({
-          form,
-          rules: {
-            dictName: { required: true, message: otherLang.notEmpty },
-            dictCode: { required: true, message: otherLang.notEmpty }
-          },
-          title: _.isEmpty(data) ? "Add DictDefinition" : "Edit DictDefinition",
-          list: [
-            { name: "Name", prop: "dictName" },
-            { name: "Code", prop: "dictCode" }
-          ]
-        })
-        .then(result => {
-          
-          this.showLoading();
-          //添加自定义数据
-          // result.dictGroupCode = this.currentTreeNode;
-          return dictionartDefSave.execute(operate, result);
-        });
-    },
-      //折叠框操作处理函数
+      //表格数据操作处理函数
       onOperateClick(menuItem, row) {
         
         if(menuItem.type === 'edit') {
@@ -498,10 +351,10 @@
         })
       },
 
-      // add() {
+      add() {
 
-      //   this.$router.push({path: '/app/app/edit/0'})
-      // },
+        this.$router.push({path: '/app/app/edit/0'})
+      },
 
       edit(row) {
 
@@ -526,7 +379,6 @@
       },
       //删除数据  
       delete(row) {
-        console.log(row)
         let lang = i18nService.getOtherLanguageMap()
         let deleteRecodFromServer = (row)=>{
           //给实例对象添加方法
@@ -543,7 +395,7 @@
               this.$error(lang['deleteRecodFail'])
             })
         }
-        //弹出模态框
+        
         this.$alert(lang['deleteWarning'], 'Warning').then(()=>{
 
           deleteRecodFromServer(row)
@@ -552,28 +404,7 @@
           
         })
       },
-      //删除数据
-       deleteTableRow(row) {
-        
-      let lang = i18nService.getOtherLanguageMap()
-      let hideTableLoading = _.debounce(()=>{this.tableLoading=false},500)
 
-      this.$alert(lang["deleteWarning"], "Warning").then(() => {
-          this.tableLoading = true;
-          return tableRowDeleteModel.execute(row.id);
-        })
-        .then(() => {
-          let index = _.findIndex(this.result.rows, r => {
-            return r.id === row.id;
-          });
-          this.result.rows.splice(index, 1);
-          hideTableLoading()
-        })
-        .catch(error => {
-          error !== "cancel" && this.$error(lang["operateError"]);
-        });
-    },
-      //获取选中的数据
       getSelectionIds() {
         let jwTable = this.$refs.jwTable
         let selections = jwTable.getSelection()
@@ -591,9 +422,7 @@
       },
 
       export() {
-        //选择下载的数据
         let selections = this.getSelectionIds()
-        //文本国际化
         let lang = i18nService.getOtherLanguageMap()
 
         if(selections.length===0) {
@@ -608,14 +437,12 @@
 
 <style lang="less">
 //   @import "../../../assets/css/variable.less";
- 
 
   .resource {
   
     .name {
       width: 60px;
       display: inline-block;
-      text-align: left;
     }
 
     .app-icon-wrapper {
