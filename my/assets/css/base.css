@@ -1,0 +1,51 @@
+
+
+html,
+body {
+  font-size: 16px;
+}
+
+.jw-main {
+  background: #f3f9fb;
+}
+
+/* 私有 */
+.main{
+  padding: 20px;
+}
+.mgb{
+  margin-bottom: 10px;
+}
+.mgbb{
+  margin-bottom: 20px;
+}
+.mgr{
+  margin-right: 10px;
+}
+.mgl{
+  margin-left: 10px;
+}
+.clearfix:after{
+  content:".";
+  display:block;
+  height:0;
+  clear:both;
+  visibility:hidden;
+  
+ }
+ .blue{
+   color: #409EFF
+ }
+ .red{
+   color:red
+ }
+ .font16{
+   font-size: 16px;
+ }
+ .font20{
+  font-size: 20px;
+  
+}
+.po{
+  cursor: pointer;
+}
