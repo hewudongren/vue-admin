@@ -67,10 +67,10 @@ import JwDialog from "jw_components/dialog";
 import appStore from "../../../stores/common.js";
 import getAppConfig from "./app-config.js";
 
-import tableModel from "models/process/table.js";
-import tableRowDelete from "models/process/row-delete.js"
-import additionModel from "models/process/addition.js"
-import queryListModel from "models/process/query-list.js"
+import tableModel from "../../../models/process/table.js";
+import tableRowDelete from "../../../models/process/row-delete.js"
+import additionModel from "../../../models/process/addition.js"
+import queryListModel from "../../../models/process/query-list.js"
 
 import saveOrgModel from "../../../myfetch/standardProcedure/save-org.js";
 import additionOrgModel from "../../../myfetch/standardProcedure/new-org";

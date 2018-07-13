@@ -91,10 +91,10 @@
   import appStore from 'jw_stores/common'
   import getAppConfig from './app-config.js'
 
-  import getSearch from 'myfetch/processParameters/index.js'
-  import getAdd from "myfetch/processParameters/add.js"
-  import saveOrgModel from "myfetch/processParameters/save-org.js"
-  import tableRowDeleteModel from 'myfetch/processParameters/row-delete'
+  import getSearch from '../../../myfetch/processParameters/index.js'
+  import getAdd from "../../../myfetch/processParameters/add.js"
+  import saveOrgModel from "../../../myfetch/processParameters/save-org.js"
+  import tableRowDeleteModel from '../../../myfetch/processParameters/row-delete'
 
   let defaultPageIndex = 1
   let loadingTimerId = 0

@@ -21,7 +21,7 @@ import createUpdateAppModel from "jw_models/app/app-create-update";
 import AppBaseEdit from "./app-edit";
 import AppRelationEdit from "jw_modules/app/widgets/tab-collapse-table";
 
-import addSave from 'myfetch/processParameters/add-save'
+import addSave from '../../../myfetch/processParameters/add-save'
 
 let loadingTimerId = 0
 

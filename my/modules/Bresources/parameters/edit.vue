@@ -298,7 +298,7 @@
 <script>
   import i18nService from "jw_services/i18n/index"
   import getAppConfig from './app-config.js'
-  import appStore from "stores/common";
+  import appStore from "../../../stores/common.js"
 
   import JwTableHeaderControl from 'jw_components/table/control-header'
   import JwTable from 'jw_components/table/table'
