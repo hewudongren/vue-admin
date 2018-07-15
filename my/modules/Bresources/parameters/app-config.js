@@ -8,7 +8,8 @@
 import i18Service from 'jw_services/i18n/index'
 import util from 'jw_common/util'
 
-function imgLoaderFailHandler(event) {
+function qq(event) {
+
   let target = event.target
 
   target.style.display = 'none';
@@ -26,8 +27,16 @@ export default function () {
     tableHeader: [{
       prop: 'name',
       sort:true,
-      color:true,
-      display:'参数名称'|| lang['platform.app_app.resourcename']
+      // class:'bluea',
+      display:'参数名称'|| lang['platform.app_app.resourcename'],
+      formatter: function(row,col,value) {
+        //创建标签
+        let h = this.$createElement
+
+        //给元素绑定事件
+        return <div class="bluea" onClick={(e)=>{this.$emit('onEite',row),e.stopPropagation()}}>{value}</div>
+      }
+
     }, {
       prop: 'showName',
       // width: 100,
@@ -42,6 +51,7 @@ export default function () {
       prop: 'department',
       // width: 100,
       sort:true,
+     
       display:'科室'|| lang['platform.app_app.version']
     }, {
       prop: 'getWay',
@@ -78,14 +88,22 @@ export default function () {
   thResource: [{
     prop: 'name',
     sort:true,
-    display:'资源名称'|| lang['platform.app_app.resourcename']
+    // class:'bluea',
+    display:'资源名称'|| lang['platform.app_app.resourcename'],
+    formatter: function(row,col,value,index) {
+      //创建标签
+      let h = this.$createElement
+  
+      //给元素绑定事件
+      return <div class="bluea"  onClick={(e)=>{this.$emit('onEdit',row,index),e.stopPropagation()}}> {value} </div>
+    }
   }
 ],
     // 头部添加按钮
     tableHeaderControl: [{
       icon: 'el-icon-plus',
       type: 'add',
-      color:'primary',
+      btnType: "primary",
       txt: lang['platform.common.add']
     }, 
     // {
@@ -103,20 +121,20 @@ export default function () {
     tableState: [{
       icon: 'el-icon-download',
       type: 'export',
-      color:'primary',
+      btnType:'primary',
       txt:'下载'|| lang['platform.common.add']
     }, {
       icon: 'el-icon-upload2',
       type: 'import',
       uploadUrl: `${Jw.gateway}/platform/app/app/import`,
       isUpload: true,
-      color:'primary',
+      btnType:'primary',
       // type: 'upload',
       txt:'上传'|| lang['platform.common.import']
     }, {
       type: 'delete',
       icon: 'el-icon-delete',
-      color:'danger',
+      btnType:'danger',
       txt:'删除'|| lang['platform.common.export']
     }],
 

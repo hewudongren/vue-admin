@@ -1,5 +1,5 @@
 <template>
-  <div class="panel resource">
+  <div class="panel parameters">
     <!-- 表头 -->
     <jw-table-control class="mgb" :title="getTitle()" :buttons="getHeaderControl()" @on-header-button="onHeaderButtonClick" />
     <div class="main">
@@ -24,9 +24,9 @@
           </div>
         </el-col>
         <el-col :span="8" class="toright">
-          <div class="clearfix">
+          <div class="grid-content bg-purple">
             <span class="name">创建时间</span>
-            <el-date-picker style="width: calc(100% - 110px)" @change="changeTime" v-model="timeBucket" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+            <el-date-picker class="date-picker" @change="changeTime" v-model="timeBucket" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
         </el-col>
@@ -47,18 +47,21 @@
             <el-input @input="inputCreator" style="width:217px" v-model="createBy" placeholder="请输入内容"></el-input>
           </div>
         </el-col>
-        <el-col :span="8" class="toright">
+        <el-col :span="8" class="toright" >
           <div class="grid-content bg-purple">
             <span class="name">关键字 </span>
-            <el-input @input="inputGxName" class="input" style="width: calc(100% - 110px)"  v-model="keyword" placeholder="创建人，名称，显示名称"></el-input>
+            <el-input @input="inputGxName" class="input"   v-model="keyword" placeholder="创建人，名称，显示名称"></el-input>
           </div>
         </el-col>
       </el-row>
       <!-- 状态去 -->
-      <jw-table-control class="mgb" float="left" :buttons="getTableState()" @on-header-button="onHeaderButtonClick" />
+      <jw-table-control class="mgb table-control-stauts"  
+      :buttons="getTableState()" 
+      @on-header-button="onHeaderButtonClick" />
       <!-- 主体 -->
       <jw-table 
       ref="jwTable" 
+      class="table"
       :data="rows" 
       :isSelection=true 
       :isRowCheckBox=true 
@@ -99,13 +102,27 @@
   let defaultPageIndex = 1
   let loadingTimerId = 0
 
-  const DEFAULT_ROW = {
-    name: '--',
-    showName: '--',
-    department: '--',
-    createBy: '--',
-    createTime: '--'
+  const DEFAULT_ROW = [
+    {
+    id:1,
+    name: '工艺',
+    showName: '磨床',
+    department: '加工科',
+    getWay:'手动输入',
+    createBy: '张三',
+    createTime: '2018.6.15'
+  },
+   {
+    id:2, 
+    name: '小马',
+    showName: '磨床',
+    department: '加工科',
+    getWay:'手动输入',
+    createBy: '张三',
+    createTime: '2018.6.15'
   }
+ 
+  ]
 
   export default {
     data() {
@@ -118,7 +135,7 @@
         keyword:'',
         totalCount: 0,
         loading: true,
-        rows: [DEFAULT_ROW],
+        rows: DEFAULT_ROW,
         currentPage: defaultPageIndex,
         pageSize: staticData.tablePageSize,
        
@@ -139,7 +156,7 @@
 
     created() {
 
-      this.fetch()
+      // this.fetch()
     },
 
     components: {
@@ -205,6 +222,7 @@
         this.rows.map(item=>{
           name.push({name:item.name})
         })
+      
         appStore.set('parameter-name',name)
         appStore.set('row-data',row)
        
@@ -333,9 +351,14 @@
       onHeaderButtonClick(buttonClicked) {
 
         if (buttonClicked.type === 'add') {
+         
           this.add()
         } else if (buttonClicked.type === 'export') {
+         
           this.export()
+        }
+        if(buttonClicked.type === 'delete'){
+          this.deleteMore()
         }
       },
     
@@ -522,25 +545,41 @@
 
           })
       },
-
+      //多选
       getSelectionIds() {
         let jwTable = this.$refs.jwTable
         let selections = jwTable.getSelection()
-
+        console.log(selections)
         return _.map(selections, (select) => {
           return select.id
         })
       },
-
+      //全选
       getAllIds() {
 
         return _.map(this.rows, (row) => {
           return row.id
         })
       },
+      //批量删除
+      deleteMore(){
+            let selections = this.getSelectionIds()
+       
+            let lang = i18nService.getOtherLanguageMap()
 
+            if (selections.length === 0) {
+              return this.$error(lang['recordSelected'])
+            }
+            //  tableRowDeleteModel.setParam(selections)
+            this.rows=this.rows.filter(item=>{
+              return selections.indexOf(item.id)===-1
+            })
+      },
+      //下载
       export () {
+       
         let selections = this.getSelectionIds()
+       
         let lang = i18nService.getOtherLanguageMap()
 
         if (selections.length === 0) {
@@ -557,18 +596,27 @@
 
 <style lang="less">
   //   @import "../../../assets/css/variable.less";
-  .resource {
+     
+       
+        
+           
+       
+    
+  .parameters {
+      
+  
      .main {
       background-color: #fff;
       height: calc(~'100% - 200px');
     }
+
     .toright{
       text-align: right;
-      .el-date-picker{
-       
+      .date-picker{
+         width: calc(~'100% - 110px')
       }
       .input{
-       
+         width: calc(~'100% - 110px')
       }
     }
     span.name {
@@ -576,13 +624,24 @@
       display: inline-block;
       text-align: left;
     }
-
-    .app-icon-wrapper {
-      //width: 80px;
-      height: 80px;
-      overflow: hidden;
-
-  
+    .table-control-stauts{
+      .right{
+        float: left;
+      }
     }
+    .el-table__body{
+      .bluea{
+        
+              color: #409EFF;
+              display: inline-block;
+              border-bottom: 1px solid #409EFF;
+              cursor: pointer;
+              margin-left: 10px;
+              padding-left: 0;
+              padding-right: 0;
+          
+      }
+    }
+
   }
 </style>

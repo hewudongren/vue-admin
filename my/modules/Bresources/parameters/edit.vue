@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </div>
-        <jw-table-control class="mgb" float="left" :buttons="getTableState()" @on-header-button="onHeaderButtonClick" />
+        <jw-table-control class="mgb table-control-status"  :buttons="getTableState()" @on-header-button="onHeaderButtonClick" />
       
         
         <jw-table 
@@ -31,7 +31,7 @@
         :isSelection=true
         :showPagination="false" 
         :header="thResource()" 
-        @onEite='onEite'
+        @onEdit='onEdit'
         @onDelete='onDelete' 
         @on-page-change="onPageChange" 
         @on-row-click='onRowClick' >
@@ -40,7 +40,7 @@
       </div>
       <!-- 右侧 -->
       <div class='panel-right'>
-        <h4 class="title">{{title}} <span class="right"><i v-if="iconFlag" title="编辑" data-type="edit" class="el-icon-edit" @click="edit($event)"></i><i v-else-if="!iconFlag" title="保存" class="el-icon-star-on" data-type="save" @click="edit($event)"></i><i title="删除" class="el-icon-close mgl"></i> </span></h4>
+        <h4 class="title">{{entity.name}} <span class="right"><i v-if="iconFlag" title="编辑" data-type="edit" class="el-icon-edit" @click="edit($event)"></i><i v-else-if="!iconFlag" title="保存" class="el-icon-star-on" data-type="save" @click="edit($event)"></i><i title="删除" class="el-icon-close mgl"></i> </span></h4>
         <!-- 初始值 -->
         <div class="main edit" v-if="iconFlag">
           <!-- 内容 -->
@@ -305,12 +305,32 @@
 
   let loadingTimerId = 0
 
+  const DEFAULT_ROW = [
+    {
+    name: '工艺',
+    showName: '磨床',
+    department: '加工科',
+    getWay:'手动输入',
+    createBy: '张三',
+    createTime: '2018.6.15'
+  },
+   {
+    name: '小马',
+    showName: '磨床',
+    department: '加工科',
+    getWay:'手动输入',
+    createBy: '张三',
+    createTime: '2018.6.15'
+  }
+ 
+  ]
+
   export default {
     data() {
       return {
         iconFlag:true,
         entity:'',    //编辑数据
-        parameterName:"",      //表格数据
+        parameterName:DEFAULT_ROW ,      //表格数据
         title:"",             //标题
         rows: [{
             name: '王小虎',
@@ -425,8 +445,9 @@
           }
 
           this.entity = entity
-          this.parameterName=parameterName
-          this.title=this.parameterName[0].name
+          // this.parameterName=parameterName
+          // this.title=this.parameterName[0].name
+        
           //this.updateCategoryForNoAdminAppBase()
           this.hideLoading()
         }
@@ -441,7 +462,7 @@
         let button = [{
           icon: '',
           type: 'save',
-          color: 'primary',
+          btnType: 'primary',
           txt: "新增" || lang['platform.common.save']
         }]
         return button
@@ -495,8 +516,11 @@
         }]
         return button
       },
-      onEite() {
-
+      onEdit(row,col,index) {
+       this.entity = row
+          let target = event.target
+          
+            target.style.color = 'red';
       },
       onDelete() {
 
@@ -565,6 +589,24 @@
            height: 30px;
          }
         }
+        .table-control-status{
+          .right{
+              float: left;
+          }
+        }
+      .el-table__body{
+        .bluea{
+          
+                color: #409EFF;
+                display: inline-block;
+                border-bottom: 1px solid #409EFF;
+                cursor: pointer;
+                margin-left: 10px;
+                padding-left: 0;
+                padding-right: 0;
+           
+        }
+    }
       }
       .panel-right {
         background-color: #fff; // vertical-align: top;
