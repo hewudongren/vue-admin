@@ -14,6 +14,7 @@
       :height="getTableHeight()"
       :highlight-current-row="highlightCurrentRow"
       :class="{ 'body-height': isPagination(), 'body-full-height': !isPagination() }"
+      :row-class-name="getIndex"
       @sort-change="onRank"
       @row-click="onRowClick"
       @select="onSelect"
@@ -21,7 +22,7 @@
       <!-- 是否显示多选框 -->
       <el-table-column v-if="isSelection" type="selection" width="50"></el-table-column>
       <!-- 是否显示序列号 -->
-      <el-table-column v-if="isIndex" type="index" width="50" label="序号"></el-table-column>
+      <el-table-column v-if="isIndex" type="index" width="50" label="序号" ></el-table-column>
       <!-- 是否显示折叠框 -->
       <el-table-column v-if="opsList" width="50" :label="opsList.display">
         <template slot-scope="scope">
@@ -40,7 +41,18 @@
         :width="item.width || 'auto'"
         :key="i">
       </el-table-column>
-      <el-table-column v-else-if="item.type"  :label="item.display">
+
+      <el-table-column
+      v-else-if="item.type=='custom'"
+      :label="item.display"
+      width="180">
+      <template slot-scope="scope">
+
+        <span  :class="a==scope.$index?'reda':'bluea'" @click.stop="onEdit(scope.row)">{{ scope.row.name }}</span>
+      </template>
+    </el-table-column>
+
+      <!-- <el-table-column v-else-if="item.type"  :label="item.display">
         <template slot-scope="scope">
           <el-select v-if="_.isArray(scope.row.parametervalue)" v-model="value" placeholder="请选择">
             <el-option
@@ -51,11 +63,8 @@
             </el-option>
         </el-select>
           <el-input v-else v-model="scope.row.parametervalue"></el-input>
-       
         </template>
-      </el-table-column>
-      
-      
+      </el-table-column> -->
     </el-table>
     <!-- 页码 -->
     <el-pagination
@@ -79,12 +88,16 @@ export default {
     'data', 'header','isSelection','isIndex',
     'showPagination','stripe','highlightCurrentRow',
     'pageSize','totalCount','currentPage','isRowCheckBox','height',
-    'opsList'
+    'opsList','a'
   ],
   data(){
      return {
-       value:""
+       value:"",
+      
      }
+  },
+  created(){
+   
   },
   components: {
     ColumnPopover
@@ -96,7 +109,13 @@ export default {
   },
 
   methods: {
-
+    onEdit(row){
+      this.$emit('onEdit',row)
+    },
+    getIndex({row, rowIndex}){
+     
+        row.index=rowIndex
+    },
     onMenuOperateHandler(menuItem, row) {
       
       this.$emit('on-operate-click',menuItem,row)
@@ -171,10 +190,10 @@ export default {
         s.checked = true
       })
     },
-
+    //事件处理为了设置值
     onSelect(selection,row) {
-
-      row.checked = !row.checked
+       console.log(row)
+       row.checked = !row.checked
       this.$emit('on-selection-change',row,this)
     },
 
@@ -248,7 +267,7 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../assets/css/variable.less";
+  // @import "../../assets/css/variable.less";
 
 
   .jw-table {
@@ -299,7 +318,7 @@ export default {
       //width: 100%;
       text-align: right;
       border-top: 1px solid #c4c6cc;
-      padding: @jw10px 0 0 0;
+      padding: 10px 0 0 0;
 
       .btn-next {
         margin-right: 0;

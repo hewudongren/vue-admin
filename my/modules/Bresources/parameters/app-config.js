@@ -90,6 +90,7 @@ export default function () {
     sort:true,
     // class:'bluea',
     display:'资源名称'|| lang['platform.app_app.resourcename'],
+    type:'custom',
     formatter: function(row,col,value,index) {
       //创建标签
       let h = this.$createElement

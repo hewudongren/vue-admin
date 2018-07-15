@@ -84,7 +84,7 @@
 </template>
 
 <script>
-  import JwTable from 'jw_components/table/table'
+  import JwTable from '../../../mycomponent/table/table.vue'
   import JwTableHeaderControl from 'jw_components/table/control-header'
   import JwDialog from "jw_components/dialog";
 
@@ -105,6 +105,7 @@
   const DEFAULT_ROW = [
     {
     id:1,
+   
     name: '工艺',
     showName: '磨床',
     department: '加工科',
@@ -120,6 +121,8 @@
     getWay:'手动输入',
     createBy: '张三',
     createTime: '2018.6.15'
+   
+    
   }
  
   ]
@@ -169,7 +172,7 @@
        //选择科室
       changeDepartment(){
             getSearch.execute({department:this.department}).then(data=>{
-              console.log(data)
+             
             this.rows=data
           
           }).catch(()=>{
@@ -218,6 +221,7 @@
       },
       //编辑页面
       onEite(row) {
+     
         let name=[]
         this.rows.map(item=>{
           name.push({name:item.name})
@@ -488,7 +492,7 @@
         
       },
       edit(row) {
-
+      
         appStore.set('row-data', row)
         this.$router.push({
           path: `/app/app/edit/${row.id}`
@@ -549,7 +553,7 @@
       getSelectionIds() {
         let jwTable = this.$refs.jwTable
         let selections = jwTable.getSelection()
-        console.log(selections)
+      
         return _.map(selections, (select) => {
           return select.id
         })

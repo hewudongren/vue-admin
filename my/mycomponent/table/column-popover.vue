@@ -37,16 +37,16 @@ export default {
 </script>
 
 <style lang="less">
-@import '../../assets/css/variable.less';
+// @import '../../assets/css/variable.less';
 
 .col-popover-list {
   li {
-    padding: @jw5px 0;
+    padding: 5px 0;
     line-height: 1;
 
     i {
       vertical-align: middle;
-      margin:0 @jw5px 0 @jw10px;
+      margin:0 5px 0 10px;
     }
   }
 

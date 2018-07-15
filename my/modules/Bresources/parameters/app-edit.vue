@@ -1,39 +1,39 @@
 <template>
   <el-form ref="jwForm" class="app-base-wrapper" :model="entity" :rules="rules" label-position="right" label-width="100px">
-    <el-form-item :label="'所属科室'||appLang['platform.app_app.name']" prop="name">
-      <el-input v-model="entity.department" :placeholder="appLang['platform.app_app.name']" :maxlength="maxLength"></el-input>
+    <el-form-item :label="'所属科室'||appLang['platform.app_app.name']" prop="department">
+      <el-input v-model="entity.department" :placeholder="'请选择科室'||appLang['platform.app_app.name']" :maxlength="maxLength"></el-input>
     </el-form-item>
-    <el-form-item :label="'参数名称'||appLang['platform.app_app.version']" prop="version">
-      <el-input v-model="entity.name" :placeholder="appLang['platform.app_app.version']" :maxlength="maxLength"></el-input>
+    <el-form-item :label="'参数名称'||appLang['platform.app_app.version']" prop="name">
+      <el-input v-model="entity.name" :placeholder="'请选择参数名称'||appLang['platform.app_app.version']" :maxlength="maxLength"></el-input>
     </el-form-item>
-    <el-form-item :label="'显示名称'||appLang['platform.app_app.index']" prop="index">
-      <el-input v-model="entity.showName" :placeholder="appLang['platform.app_app.index']" :maxlength="maxLength"></el-input>
+    <el-form-item :label="'显示名称'||appLang['platform.app_app.index']" prop="showName">
+      <el-input v-model="entity.showName" :placeholder="'请选择显示名称'||appLang['platform.app_app.index']" :maxlength="maxLength"></el-input>
     </el-form-item>
-    <el-form-item :label="'取值方式'||appLang['platform.app_app.icon']">
-       <el-input v-model="entity.getWay" :placeholder="appLang['platform.app_app.index']" :maxlength="maxLength"></el-input>
+    <el-form-item :label="'取值方式'||appLang['platform.app_app.icon']" prop='getWay'>
+       <el-input v-model="entity.getWay" :placeholder="'请选择取值方式'||appLang['platform.app_app.index']" :maxlength="maxLength"></el-input>
     </el-form-item>
-    <el-form-item :label="'大类'||appLang['platform.app_app.keywords']">
-      <el-input v-model="entity.bigClass" :placeholder="appLang['platform.app_app.keywords']" :maxlength="maxLength"></el-input>
+    <el-form-item :label="'大类'||appLang['platform.app_app.keywords']" prop="bigClass">
+      <el-input v-model="entity.bigClass" :placeholder="'请选择大类'||appLang['platform.app_app.keywords']" :maxlength="maxLength"></el-input>
     </el-form-item>
-    <el-form-item :label="'分类'||appLang['platform.app_app.docCenter']">
-      <el-input v-model="entity.category" :placeholder="appLang['platform.app_app.docCenter']"></el-input>
+    <el-form-item :label="'分类'||appLang['platform.app_app.docCenter']" prop="category">
+      <el-input v-model="entity.category" :placeholder="'请选择分类'||appLang['platform.app_app.docCenter']"></el-input>
     </el-form-item>
  
-     <el-form-item :label="'状态'||appLang['platform.app_app.category']">
+     <el-form-item :label="'状态'||appLang['platform.app_app.category']" prop="status">
       <el-select v-model="entity.status" placeholder="select..." class="select" >
         <el-option v-for="item in getStaticCategory()" :key="item.code" :value="item.code" :label="item.name"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item :label="'单位'||appLang['platform.svc.gitRepo']">
-      <el-input v-model="entity.unit" :placeholder="appLang['platform.svc.gitRepo']"></el-input>
+    <el-form-item :label="'单位'||appLang['platform.svc.gitRepo']" prop="unit">
+      <el-input v-model="entity.unit" :placeholder="'请选择单位'||appLang['platform.svc.gitRepo']"></el-input>
     </el-form-item> 
 
-    <el-form-item :label="'initialValue'||appLang['platform.svc.gitRepo']">
-      <el-input v-model="entity.initialValue" :placeholder="appLang['platform.svc.gitRepo']"></el-input>
+    <el-form-item :label="'initialValue'||appLang['platform.svc.gitRepo']" prop="initialValue">
+      <el-input v-model="entity.initialValue" :placeholder="'请选择分类'||appLang['platform.svc.gitRepo']"></el-input>
     </el-form-item> 
 
-    <el-form-item :label="'备注'||appLang['platform.common.desc']">
-      <el-input type="textarea" :maxlength="descMaxLength" v-model="entity.note" :placeholder="appLang['platform.common.desc']"></el-input>
+    <el-form-item :label="'备注'||appLang['platform.common.desc']" prop="note">
+      <el-input type="textarea" :maxlength="descMaxLength" v-model="entity.note" :placeholder="'请备注'||appLang['platform.common.desc']"></el-input>
     </el-form-item>
   </el-form>
 </template>
@@ -59,7 +59,8 @@ export default {
   props: ['entity' , 'isCategoryDisabled'],
 
   data() {
-    let { lang } = i18nService.getLanguageMap()
+    // let { lang } = i18nService.getLanguageMap()
+    let lang = i18nService.getOtherLanguageMap()
 
     disabledUploadState = false
     return {
@@ -72,9 +73,11 @@ export default {
       action: `${Jw.gateway}/storage/common/upload`,
 
       rules: {
-        department: [{ validator: validate.name, trigger: 'blur', required: true }],
-        department: [{ validator: validate.version, trigger: 'blur', required: true }],
-        showName: [{ validator: validate.index, trigger: 'blur', required: true }]
+        department: [{ validator: validate.department, trigger: 'blur', required: true }],
+        name: [{ validator: validate.name, trigger: 'blur', required: true }],
+        showName: [{ validator: validate.showName, trigger: 'blur', required: true }],
+        getWay: [{ message: lang['notEmpty'], trigger: 'blur', required: true }],
+        bigClass: [{ required: true, message: lang['role-message-name'], trigger: 'blur'  }]
       }
     }
   },

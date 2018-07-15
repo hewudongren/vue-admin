@@ -1,10 +1,10 @@
-
+//配置公共验证规则
 import i18nService from 'jw_services/i18n/index'
 
 
 export default {
 
-  name(rule, value, callback) {
+  department(rule, value, callback) {
     let lang = i18nService.getOtherLanguageMap()
 
     if(_.isEmpty(value)) {
@@ -15,7 +15,7 @@ export default {
     callback()
   },
 
-  version(rule,value,callback) {
+  name(rule,value,callback) {
     let lang = i18nService.getOtherLanguageMap()
 
     if(_.isEmpty(value)) {
@@ -26,7 +26,7 @@ export default {
     callback()
   },
 
-  index(rule,value,callback) {
+  showName(rule,value,callback) {
     let lang = i18nService.getOtherLanguageMap()
 
     if(_.isEmpty(value)) {

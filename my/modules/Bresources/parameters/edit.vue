@@ -31,6 +31,7 @@
         :isSelection=true
         :showPagination="false" 
         :header="thResource()" 
+        :a='i'
         @onEdit='onEdit'
         @onDelete='onDelete' 
         @on-page-change="onPageChange" 
@@ -301,7 +302,7 @@
   import appStore from "../../../stores/common.js"
 
   import JwTableHeaderControl from 'jw_components/table/control-header'
-  import JwTable from 'jw_components/table/table'
+  import JwTable from '../../../mycomponent/table/table.vue'
 
   let loadingTimerId = 0
 
@@ -332,6 +333,7 @@
         entity:'',    //编辑数据
         parameterName:DEFAULT_ROW ,      //表格数据
         title:"",             //标题
+        i:"",                //索引
         rows: [{
             name: '王小虎',
             parametervalue: '上海市普陀区金沙江路 1518 弄',
@@ -443,12 +445,22 @@
           if(_.isEmpty(entity)) {
             return this.exit()
           }
-
+       
           this.entity = entity
+         
           // this.parameterName=parameterName
           // this.title=this.parameterName[0].name
         
           //this.updateCategoryForNoAdminAppBase()
+       
+          // this.parameterName.map(item=>{
+          //     if(item.index==this.entity.index){
+          //         item.checked=true
+          //     }else{
+          //       item.checked=false
+          //     }
+          // })
+         this.i=this.entity.index
           this.hideLoading()
         }
       },
@@ -516,11 +528,21 @@
         }]
         return button
       },
-      onEdit(row,col,index) {
+      onEdit(row) {
+        // row.checked=true
+      //  console.log(row)
+      // this.$refs.jwTable.toggleRowSelection(row,true)
+        this.parameterName.map(item=>{
+              if(item.index==row.index){
+                  item.checked=true
+              }else{
+                item.checked=false
+              }
+          })
+
+       this.i=row.index
        this.entity = row
-          let target = event.target
-          
-            target.style.color = 'red';
+        
       },
       onDelete() {
 
@@ -605,6 +627,15 @@
                 padding-left: 0;
                 padding-right: 0;
            
+        }
+        .reda{
+                color: red;
+                display: inline-block;
+                border-bottom: 1px solid red;
+                cursor: pointer;
+                margin-left: 10px;
+                padding-left: 0;
+                padding-right: 0;
         }
     }
       }
