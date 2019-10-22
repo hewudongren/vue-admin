@@ -10,11 +10,7 @@
     <div>好好学习，天天向上</div>
     <div>创建了develop分支</div>
     <div>我回退了，上次的代码不要了</div>
-<<<<<<< HEAD
     <div>我有回流的</div>
-=======
-    <div>我提交代码再测试一次</div>
->>>>>>> 3e78d00bd6cacac5e553b2636dd5ad5edd9a89ed
     <div class="main">
      <el-row class="mgb">
         <el-col :span="8">
