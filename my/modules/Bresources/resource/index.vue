@@ -9,7 +9,11 @@
     />
     <div>好好学习，天天向上</div>
     <div>创建了develop分支</div>
+<<<<<<< HEAD
     <div>我是测试代码，我已经提交到远程git仓库了</div>
+=======
+    <div>我回退了，上次的代码不要了</div>
+>>>>>>> remotes/origin/Branch_1a2df09
     <div class="main">
      <el-row class="mgb">
         <el-col :span="8">
