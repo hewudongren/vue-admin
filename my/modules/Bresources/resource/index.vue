@@ -8,7 +8,6 @@
       @on-header-button="onHeaderButtonClick"
     />
    <div>我第一次提交</div>
-   <div>我第二次提交</div>
     <div class="main">
      <el-row class="mgb">
         <el-col :span="8">
